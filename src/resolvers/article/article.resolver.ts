@@ -21,6 +21,7 @@ import { UserEntity } from 'src/decorators/user.decorator';
 import { User } from 'src/models/user.model';
 import { GqlAuthGuard } from 'src/guards/gql-auth.guard';
 import { UseGuards } from '@nestjs/common';
+import { UpdateArticleInput } from './dto/updateArticle.input';
 
 const pubSub = new PubSub();
 
@@ -53,6 +54,22 @@ export class ArticleResolver {
     pubSub.publish('articleCreated', { articleCreated: newArticle });
     return newArticle;
   }
+
+  // @UseGuards(GqlAuthGuard)
+  @Mutation(() => Article)
+  async updateArticle(@Args('data') data: UpdateArticleInput) {
+
+    const updatedArticle = this.prisma.article.update({
+    
+      data:data,
+      where: {
+        id: data.id,
+      },
+    });
+    pubSub.publish('articleCreated', { articleCreated: updatedArticle });
+    return updatedArticle;
+  }
+
 
   @Query(() => ArticleConnection)
   async publishedArticles(

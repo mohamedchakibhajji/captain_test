@@ -92,6 +92,7 @@ type Mutation {
   login(data: LoginInput!): Auth!
   refreshToken(token: String!): Token!
   signup(data: SignupInput!): Auth!
+  updateArticle(data: UpdateArticleInput!): Article!
   updateUser(data: UpdateUserInput!): User!
 }
 
@@ -184,6 +185,14 @@ type Token {
 
   """JWT refresh token"""
   refreshToken: String!
+}
+
+input UpdateArticleInput {
+  content: String
+  id: String!
+  image: String
+  timetoread: Int
+  title: String
 }
 
 input UpdateUserInput {
