@@ -29,22 +29,25 @@ export class ArticleResolver {
   constructor(private prisma: PrismaService) {}
 
   @Subscription(() => Article)
-  postCreated() {
-    return pubSub.asyncIterator('postCreated');
+  articleCreated() {
+    return pubSub.asyncIterator('article');
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Article)
-  async createPost(
+  async createArticle(
     @UserEntity() user: User,
     @Args('data') data: CreateArticleInput
   ) {
     const newArticle = this.prisma.article.create({
       data: {
-        published: true,
+        published: false,
         title: data.title,
         content: data.content,
         authorId: user.id,
+        timetoread: data.timetoread,
+        image: data.image,
+        archived:false
       },
     });
     pubSub.publish('articleCreated', { articleCreated: newArticle });
@@ -52,7 +55,7 @@ export class ArticleResolver {
   }
 
   @Query(() => ArticleConnection)
-  async publishedPosts(
+  async publishedArticles(
     @Args() { after, before, first, last }: PaginationArgs,
     @Args({ name: 'query', type: () => String, nullable: true })
     query: string,

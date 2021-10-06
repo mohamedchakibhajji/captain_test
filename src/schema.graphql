@@ -67,6 +67,13 @@ input ChangePasswordInput {
 
 input CreateArticleInput {
   content: String!
+  image: String!
+  timetoread: Int!
+  title: String!
+}
+
+input CreatePostInput {
+  content: String!
   title: String!
 }
 
@@ -81,6 +88,7 @@ input LoginInput {
 type Mutation {
   changePassword(data: ChangePasswordInput!): User!
   createArticle(data: CreateArticleInput!): Article!
+  createPost(data: CreatePostInput!): Post!
   login(data: LoginInput!): Auth!
   refreshToken(token: String!): Token!
   signup(data: SignupInput!): Auth!
@@ -127,12 +135,28 @@ type PostEdge {
   node: Post!
 }
 
+input PostOrder {
+  direction: OrderDirection!
+  field: PostOrderField!
+}
+
+"""Properties by which post connections can be ordered."""
+enum PostOrderField {
+  content
+  createdAt
+  id
+  published
+  title
+  updatedAt
+}
+
 type Query {
   hello(name: String!): String!
   helloWorld: String!
   me: User!
   post(postId: String!): Article!
-  publishedPosts(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrder, query: String, skip: Int): ArticleConnection!
+  publishedArticles(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrder, query: String, skip: Int): ArticleConnection!
+  publishedPosts(after: String, before: String, first: Int, last: Int, orderBy: PostOrder, query: String, skip: Int): PostConnection!
   userPosts(userId: String!): [Post!]!
 }
 
@@ -150,7 +174,8 @@ input SignupInput {
 }
 
 type Subscription {
-  postCreated: Article!
+  articleCreated: Article!
+  postCreated: Post!
 }
 
 type Token {

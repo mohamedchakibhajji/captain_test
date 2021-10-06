@@ -10,4 +10,14 @@ export class CreateArticleInput {
   @Field()
   @IsNotEmpty()
   title: string;
+
+  @Field()
+  @IsNotEmpty()
+  timetoread: number;
+
+  @Field()
+  @IsNotEmpty()
+  image: string;
+
+
 }
