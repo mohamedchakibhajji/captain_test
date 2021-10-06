@@ -86,10 +86,12 @@ input LoginInput {
 }
 
 type Mutation {
+  archiveArticle(id: String!): Article!
   changePassword(data: ChangePasswordInput!): User!
   createArticle(data: CreateArticleInput!): Article!
   createPost(data: CreatePostInput!): Post!
   login(data: LoginInput!): Auth!
+  publishArticle(id: String!): Article!
   refreshToken(token: String!): Token!
   signup(data: SignupInput!): Auth!
   updateArticle(data: UpdateArticleInput!): Article!

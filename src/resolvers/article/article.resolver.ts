@@ -55,7 +55,7 @@ export class ArticleResolver {
     return newArticle;
   }
 
-  // @UseGuards(GqlAuthGuard)
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Article)
   async updateArticle(@Args('data') data: UpdateArticleInput) {
 
@@ -66,9 +66,38 @@ export class ArticleResolver {
         id: data.id,
       },
     });
-    pubSub.publish('articleCreated', { articleCreated: updatedArticle });
+    pubSub.publish('articleupdated', { articleUpdated: updatedArticle });
     return updatedArticle;
   }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Article)
+  async publishArticle(@Args('id') id: string) {
+
+    const publishedArticle = this.prisma.article.update({
+      data:{published:true},
+      where: {
+        id: id,
+      },
+    });
+    pubSub.publish('articlePublished', { articlePublished: publishedArticle });
+    return publishedArticle;
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Article)
+  async archiveArticle(@Args('id') id: string) {
+
+    const articleArchived = this.prisma.article.update({
+      data:{archived:true},
+      where: {
+        id: id,
+      },
+    });
+    pubSub.publish('articleArchived', { articleArchived: articleArchived });
+    return articleArchived;
+  }
+
 
 
   @Query(() => ArticleConnection)
