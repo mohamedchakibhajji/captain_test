@@ -99,64 +99,38 @@ export class ArticleResolver {
   }
 
 
+  
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Article)
+  async includeArticleIssue(@Args('id') id: string , @Args('issue') issue: string) {
 
-  @Query(() => ArticleConnection)
-  async publishedArticles(
-    @Args() { after, before, first, last }: PaginationArgs,
-    @Args({ name: 'query', type: () => String, nullable: true })
-    query: string,
-    @Args({
-      name: 'orderBy',
-      type: () => ArticleOrder,
-      nullable: true,
-    })
-    orderBy: ArticleOrder
-  ) {
-    const a = await findManyCursorConnection(
-      (args) =>
-        this.prisma.article.findMany({
-          include: { author: true },
-          where: {
-            published: true,
-            title: { contains: query || '' },
-          },
-          orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : null,
-          ...args,
-        }),
-      () =>
-        this.prisma.article.count({
-          where: {
-            published: true,
-            title: { contains: query || '' },
-          },
-        }),
-      { first, last, before, after }
-    );
-    return a;
+    const articleIncluded = this.prisma.article.update({
+      data:{issueId:issue},
+      where: {
+        id: id,
+      },
+    });
+    pubSub.publish('articleIncluded', { articleIncluded: articleIncluded });
+    return articleIncluded;
   }
 
-  // @Query(() => [Article])
-  // userPosts(@Args() id: UserIdArgs) {
-  //   return this.prisma.user
-  //     .findUnique({ where: { id: id.userId } })
-  //     .article({ where: { published: true } });
 
-  //   // or
-  //   // return this.prisma.posts.findMany({
-  //   //   where: {
-  //   //     published: true,
-  //   //     author: { id: id.userId }
-  //   //   }
-  //   // });
-  // }
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Article)
+  async removeArticleIssue(@Args('id') id: string) {
 
-  @Query(() => Article)
-  async post(@Args() id: PostIdArgs) {
-    return this.prisma.article.findUnique({ where: { id: id.postId } });
+    const articleremoved = this.prisma.article.update({
+      data:{issueId:null},
+      where: {
+        id: id,
+      },
+    });
+    pubSub.publish('articleremoved', { articleremoved: articleremoved });
+    return articleremoved;
   }
 
-  @ResolveField('author')
-  async author(@Parent() post: Article) {
-    return this.prisma.article.findUnique({ where: { id: post.id } }).author();
-  }
+
+ 
+
+ 
 }

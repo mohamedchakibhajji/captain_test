@@ -1,6 +1,7 @@
 import { ObjectType } from '@nestjs/graphql';
 import { User } from './user.model';
 import { BaseModel } from './base.model';
+import { Issue } from './issue-model';
 
 @ObjectType()
 export class Article extends BaseModel {
@@ -10,6 +11,6 @@ export class Article extends BaseModel {
   author: User;
   timetoread: number;
   image: string;
-  issueid:string;
+  issue:Issue;
   archived:boolean;
 }

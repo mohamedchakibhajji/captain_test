@@ -11,7 +11,7 @@ type Article {
   createdAt: Date!
   id: ID!
   image: String!
-  issueid: String!
+  issue: Issue!
   published: Boolean!
   timetoread: Int!
   title: String!
@@ -20,35 +20,9 @@ type Article {
   updatedAt: Date!
 }
 
-type ArticleConnection {
-  edges: [ArticleEdge!]
-  pageInfo: PageInfo!
-  totalCount: Int!
-}
-
 type ArticleEdge {
   cursor: String!
   node: Article!
-}
-
-input ArticleOrder {
-  direction: OrderDirection!
-  field: ArticleOrderField!
-}
-
-"""Articles by which post connections can be ordered."""
-enum ArticleOrderField {
-  archived
-  author
-  content
-  createdAt
-  id
-  image
-  issueid
-  published
-  timetoread
-  title
-  updatedAt
 }
 
 type Auth {
@@ -101,6 +75,22 @@ type IssueEdge {
   node: Issue!
 }
 
+input IssueOrder {
+  direction: OrderDirection!
+  field: IssueOrderField!
+}
+
+"""issues by which articles connections can be ordered."""
+enum IssueOrderField {
+  archived
+  articles
+  createdAt
+  id
+  published
+  title
+  updatedAt
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -113,10 +103,12 @@ type Mutation {
   createArticle(data: CreateArticleInput!): Article!
   createIssue(data: CreateIssueInput!): Issue!
   createPost(data: CreatePostInput!): Post!
+  includeArticleIssue(id: String!, issue: String!): Article!
   login(data: LoginInput!): Auth!
   publishArticle(id: String!): Article!
   publishIssue(id: String!): Issue!
   refreshToken(token: String!): Token!
+  removeArticleIssue(id: String!): Article!
   signup(data: SignupInput!): Auth!
   updateArticle(data: UpdateArticleInput!): Article!
   updateUser(data: UpdateUserInput!): User!
@@ -181,8 +173,8 @@ type Query {
   hello(name: String!): String!
   helloWorld: String!
   me: User!
-  post(postId: String!): Article!
-  publishedArticles(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrder, query: String, skip: Int): ArticleConnection!
+  post(postId: String!): Post!
+  publishedArticles(after: String, before: String, first: Int, last: Int, orderBy: IssueOrder, query: String, skip: Int): IssueConnection!
   publishedPosts(after: String, before: String, first: Int, last: Int, orderBy: PostOrder, query: String, skip: Int): PostConnection!
   userPosts(userId: String!): [Post!]!
 }

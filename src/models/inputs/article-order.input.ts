@@ -11,7 +11,7 @@ export enum ArticleOrderField {
   author= 'User',
   timetoread= 'timetoread',
   image= 'image',
-  issueid="issueid",
+  issue="Issue",
   archived="archived"
 }
 
