@@ -2,6 +2,55 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Article {
+  archived: Boolean!
+  author: User!
+  content: String!
+
+  """Identifies the date and time when the object was created."""
+  createdAt: Date!
+  id: ID!
+  image: String!
+  issueid: String!
+  published: Boolean!
+  timetoread: Int!
+  title: String!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: Date!
+}
+
+type ArticleConnection {
+  edges: [ArticleEdge!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ArticleEdge {
+  cursor: String!
+  node: Article!
+}
+
+input ArticleOrder {
+  direction: OrderDirection!
+  field: ArticleOrderField!
+}
+
+"""Articles by which post connections can be ordered."""
+enum ArticleOrderField {
+  archived
+  author
+  content
+  createdAt
+  id
+  image
+  issueid
+  published
+  timetoread
+  title
+  updatedAt
+}
+
 type Auth {
   """JWT access token"""
   accessToken: String!
@@ -16,7 +65,7 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
-input CreatePostInput {
+input CreateArticleInput {
   content: String!
   title: String!
 }
@@ -31,7 +80,7 @@ input LoginInput {
 
 type Mutation {
   changePassword(data: ChangePasswordInput!): User!
-  createPost(data: CreatePostInput!): Post!
+  createArticle(data: CreateArticleInput!): Article!
   login(data: LoginInput!): Auth!
   refreshToken(token: String!): Token!
   signup(data: SignupInput!): Auth!
@@ -78,27 +127,12 @@ type PostEdge {
   node: Post!
 }
 
-input PostOrder {
-  direction: OrderDirection!
-  field: PostOrderField!
-}
-
-"""Properties by which post connections can be ordered."""
-enum PostOrderField {
-  content
-  createdAt
-  id
-  published
-  title
-  updatedAt
-}
-
 type Query {
   hello(name: String!): String!
   helloWorld: String!
   me: User!
-  post(postId: String!): Post!
-  publishedPosts(after: String, before: String, first: Int, last: Int, orderBy: PostOrder, query: String, skip: Int): PostConnection!
+  post(postId: String!): Article!
+  publishedPosts(after: String, before: String, first: Int, last: Int, orderBy: ArticleOrder, query: String, skip: Int): ArticleConnection!
   userPosts(userId: String!): [Post!]!
 }
 
@@ -116,7 +150,7 @@ input SignupInput {
 }
 
 type Subscription {
-  postCreated: Post!
+  postCreated: Article!
 }
 
 type Token {
