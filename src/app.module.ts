@@ -12,6 +12,7 @@ import config from './configs/config';
 import { GraphqlConfig } from './configs/config.interface';
 import { PrismaModule } from 'nestjs-prisma';
 import { ArticleModule } from './resolvers/article/article.module';
+import { IssueModule } from './resolvers/issue/issue.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ArticleModule } from './resolvers/article/article.module';
     AuthModule,
     UserModule,
     PostModule,
+    IssueModule,
     ArticleModule,
   ],
   controllers: [AppController],

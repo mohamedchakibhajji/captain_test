@@ -46,11 +46,23 @@ model Article {
   content   String?
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  String?
+  issue    Issue?    @relation(fields: [issueId], references: [id])
+  issueId  String?
   timetoread Int?
   image     String
   archived  Boolean?
 }
 
+
+model Issue {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean
+  title     String
+  articles     Article[]
+  archived  Boolean?
+}
 
 
 enum Role {

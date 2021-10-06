@@ -72,6 +72,10 @@ input CreateArticleInput {
   title: String!
 }
 
+input CreateIssueInput {
+  title: String!
+}
+
 input CreatePostInput {
   content: String!
   title: String!
@@ -80,6 +84,23 @@ input CreatePostInput {
 """Date custom scalar type"""
 scalar Date
 
+type Issue {
+  createdAt: Date!
+  id: String!
+  updatedAt: Date!
+}
+
+type IssueConnection {
+  edges: [IssueEdge!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type IssueEdge {
+  cursor: String!
+  node: Issue!
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -87,11 +108,14 @@ input LoginInput {
 
 type Mutation {
   archiveArticle(id: String!): Article!
+  archiveIssue(id: String!): Issue!
   changePassword(data: ChangePasswordInput!): User!
   createArticle(data: CreateArticleInput!): Article!
+  createIssue(data: CreateIssueInput!): Issue!
   createPost(data: CreatePostInput!): Post!
   login(data: LoginInput!): Auth!
   publishArticle(id: String!): Article!
+  publishIssue(id: String!): Issue!
   refreshToken(token: String!): Token!
   signup(data: SignupInput!): Auth!
   updateArticle(data: UpdateArticleInput!): Article!
@@ -178,6 +202,7 @@ input SignupInput {
 
 type Subscription {
   articleCreated: Article!
+  issueCreated: Issue!
   postCreated: Post!
 }
 
