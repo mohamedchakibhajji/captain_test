@@ -20,8 +20,8 @@ model User {
   password  String
   firstname String?
   lastname  String?
+  articles  Article[]
   posts     Post[]
-  articles     Article[]
   role      Role
 }
 
@@ -60,7 +60,7 @@ model Issue {
   updatedAt DateTime @updatedAt
   published Boolean
   title     String
-  articles     Article[]
+  articles  Article[]
   archived  Boolean?
 }
 

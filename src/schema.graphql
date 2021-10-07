@@ -59,8 +59,17 @@ input CreatePostInput {
 scalar Date
 
 type Issue {
+  """archived or no"""
+  archived: Boolean!
+  articles: [Article!]
   createdAt: Date!
   id: String!
+
+  """published or no"""
+  published: Boolean!
+
+  """name of the issue"""
+  title: String!
   updatedAt: Date!
 }
 
@@ -170,11 +179,12 @@ enum PostOrderField {
 }
 
 type Query {
+  getArticles(after: String, before: String, first: Int, last: Int, orderBy: IssueOrder, query: String, skip: Int): IssueConnection!
   hello(name: String!): String!
   helloWorld: String!
+  issueArticles(issueId: String!): [Issue!]!
   me: User!
   post(postId: String!): Post!
-  publishedArticles(after: String, before: String, first: Int, last: Int, orderBy: IssueOrder, query: String, skip: Int): IssueConnection!
   publishedPosts(after: String, before: String, first: Int, last: Int, orderBy: PostOrder, query: String, skip: Int): PostConnection!
   userPosts(userId: String!): [Post!]!
 }

@@ -22,6 +22,7 @@ import { User } from 'src/models/user.model';
 import { GqlAuthGuard } from 'src/guards/gql-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { UpdateIssueInput } from './dto/updateIssue.input';
+import { IssueIdArgs } from 'src/models/args/issue-id.args';
 
 const pubSub = new PubSub();
 
@@ -83,7 +84,7 @@ export class IssueResolver {
 
 
   @Query(() => IssueConnection)
-  async publishedArticles(
+  async getArticles(
     @Args() { after, before, first, last }: PaginationArgs,
     @Args({ name: 'query', type: () => String, nullable: true })
     query: string,
@@ -117,20 +118,20 @@ export class IssueResolver {
     return a;
   }
 
-  // @Query(() => [Article])
-  // userPosts(@Args() id: UserIdArgs) {
-  //   return this.prisma.user
-  //     .findUnique({ where: { id: id.userId } })
-  //     .article({ where: { published: true } });
-
-  //   // or
-  //   // return this.prisma.posts.findMany({
-  //   //   where: {
-  //   //     published: true,
-  //   //     author: { id: id.userId }
-  //   //   }
-  //   // });
-  // }
+  @Query(() => [Issue])
+  issueArticles(@Args() Issue: IssueIdArgs) {
+    return this.prisma.issue
+      .findMany({ where: {id:Issue.issueId} ,  include: {
+        articles: true
+       }}  );
+    // or
+    // return this.prisma.posts.findMany({
+    //   where: {
+    //     published: true,
+    //     author: { id: id.userId }
+    //   }
+    // });
+  }
 
 
 
